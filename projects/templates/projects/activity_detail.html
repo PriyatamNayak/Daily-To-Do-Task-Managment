@@ -1,0 +1,50 @@
+{% extends 'projects/base.html' %}
+{% block title %}
+{{ activity }}
+{% endblock %}
+{% block content %}
+
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h1 class="h2">{{ activity }}</h1>
+    <div class="btn-toolbar mb-2 mb-md-0">
+     <div class="btn-group mr-2">          
+            <button type="button" class="btn btn-sm btn-secondary">Edit</button>
+            <a class="btn btn-sm btn-outline-secondary" href="{% url 'activity_update' activity.pk %}"><span data-feather="edit"></a>    
+        </div>
+        <div class="btn-group mr-2">          
+            <button type="button" class="btn btn-sm btn-secondary" onClick="window.print()">print</button>
+            <a class="btn btn-sm btn-outline-secondary" href="" onClick="window.print()"><span data-feather="printer"></a>    
+        </div>
+        <div class="btn-group mr-2">          
+            <div class="btn btn-sm btn-secondary" onClick="window.print()">Done</div>
+            <a class="btn btn-sm btn-outline-secondary" onClick="updateActivityStatu({{activity.pk}})"  ><span data-feather="check"></a>    
+        </div>
+        
+    </div>
+</div>
+<p>{{ activity.Title }}</p> 
+<p>{{ activity.Description |safe }}</p> 
+</div>
+
+
+{% endblock %}
+{% block js %}
+const updateActivityStatu = (pk) =>{
+    fetch(`/api/activities/done/${pk}/`)
+    .then(response=>{
+        return response.json();
+    })
+    .then(res=>{
+        if (res =='Done')
+        {
+            /** redirect to Activity list */
+            window.location = "/activity/"; 
+        }
+        else
+        {
+            console.log(res);
+        }
+        
+    });
+}
+{% endblock %}

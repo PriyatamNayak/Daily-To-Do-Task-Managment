@@ -1,0 +1,495 @@
+
+{% extends 'projects/base.html' %}
+{% load static %}
+{% block content %}
+   <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+       <h1 class="h2" style="color: gray">Dashboard</h1>
+        <div class="btn-toolbar mb-2 mb-md-0">
+        <div class="btn-group mr-2"> 
+        <button type="button" class="btn btn-sm btn-warning text-white btn-outline-secondary" data-toggle="modal"  title="Click to revise existing notes" data-target="#Revision" onclick=loadRevisionItem()>
+        Launch Revison
+        </button>    
+        </div>
+        <div class="btn-group mr-2"> 
+        <button type="button" class="btn btn-sm btn-warning text-white btn-outline-secondary" data-toggle="modal"  title="Click to add revision note." data-target="#AddRevisionNote" >
+        Add Note
+        </button>    
+        </div>
+        
+          {% comment %} <button type="button" class="btn btn-sm btn-outline-secondary dropdown-toggle">
+            <span data-feather="calendar"></span>
+            This week
+          </button> {% endcomment %}
+        </div>
+      </div>
+ <!--Cards start-->
+ <div class="state-overview">
+      <div class="row">
+						        <div class="col-xl-3 col-md-6 col-12">
+						          <div class="info-box bg-b-orange shadow-custom">
+						            <span class="info-box-icon push-bottom"><i class="material-icons">
+                        <span data-feather="layers"></span>
+                         </i></span>
+						            <div class="info-box-content">
+						              <span class="info-box-text">Revision Count</span>
+						              <span class="info-box-number">{{revision_data.0}}</span>
+						              <div class="progress">
+						                <div class="progress-bar" style="width: {{revision_width}}%"></div>
+						              </div>
+						              <span class="progress-description">
+						                   100 is daily target.
+						                  </span>
+						            </div>
+						            <!-- /.info-box-content -->
+						          </div>
+						          <!-- /.info-box -->
+						        </div>
+						        <!-- /.col -->
+						        <div class="col-xl-3 col-md-6 col-12">
+						          <div class="info-box bg-b-green shadow-custom">
+						            <span class="info-box-icon push-bottom"><i class="material-icons">
+                        <span data-feather="activity"></span>
+                        </i></span>
+						            <div class="info-box-content">
+						              <span class="info-box-text">Activity Count</span>
+						              <span class="info-box-number ">{{activity_data.0}}</span>
+						              <div class="progress">
+						                <div class="progress-bar" style="width: {{activity_width}}%"></div>
+						              </div>
+						              <span class="progress-description">
+						                    10 is daily target.
+						                  </span>
+						            </div>
+						            <!-- /.info-box-content -->
+						          </div>
+						          <!-- /.info-box -->
+						        </div>
+						        <!-- /.col -->
+						      </div>
+</div>
+<!--cards end-->
+
+<!--chart start-->
+<div class="row">
+  <div class="col-sm-6 " >
+    <div class="card card-box chart_card">
+          <div class="card-head">
+          <header>Revision Progress</header>
+          </div>
+          <div class="card-body no-padding height-9">
+            <div id="container" >        
+            <canvas id="RevisionChart"></canvas>            
+            </div>
+          </div>
+    </div>
+  </div>
+  <div class="col-sm-6 " >
+    <div class="card card-box chart_card">
+          <div class="card-head">
+          <header>Activity Progress</header>
+          </div>
+          <div class="card-body no-padding height-9">
+            <div id="container" >        
+            <canvas id="Activity"></canvas>            
+            </div>
+          </div>
+    </div>
+  </div>
+</div>
+<!--Chart End-->
+<!--link Card-->
+<div class="row  mt-2  mb-5">
+      <div class="col-sm-6 " >
+          <div class="card card-box chart_card">
+            <div class="card-head">
+            <header>Fav Link</header>
+              <a class="align-items-center text-muted" href="{% url 'link-add' %}" aria-label="Add a link">
+                <span data-feather="plus-circle"></span>
+              </a>
+            </div>
+            <div class="card-body no-padding height-9 w-100">
+                <ul class="nav flex-column mb-2">
+                  {% for link in links%}
+                <li class="nav-item">
+                <a class="nav-link" href="{{link.link}}" target="_blank">
+                <span data-feather="external-link"></span>
+                {{link.name}}
+                </a>
+                </li>
+                {% endfor %} 
+                </ul>
+            </div>
+          </div>
+      </div>
+      <!--Recent Todo -->
+            <div class="col-sm-6 " >
+          <div class="card card-box chart_card">
+            <div class="card-head">
+            <header>TodoList</header>
+            </div>
+            <div class="card-body no-padding height-9 w-100">
+                <ul class="nav flex-column mb-2">
+                  {% for item in tasks%}
+                <li class="nav-item">
+                <a  href="{% url 'activity_update'  item.pk %}?next={{ request.path|urlencode }}">{{item.Title}}</a>
+                
+                {{link.name}}
+                </a>
+                </li>
+                {% endfor %} 
+                </ul>
+            </div>
+          </div>
+      </div>
+
+    <!-- End Recent Todo-->
+</div>
+<!--Link card End-->    
+        
+
+<!-- Modal -->
+<div class="modal fade" id="Revision" tabindex="-1" role="dialog" aria-labelledby="Revision" aria-hidden="true">
+  <div class="modal-dialog modal-xl" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="Revision">Revision</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+       <div class="modal-body " id="last_upd">        
+      </div>
+      <div class="modal-body modal-body-revision">
+        Loading...
+        
+      </div>
+      <div class="modal-body btn-group" id="tags">        
+      </div>
+      <div id="model_id" class="invisible"></div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" onclick=NextRevisionItem()>Next</button>
+        <button type="button" class="btn btn-warning" onclick=EditRevisionItem()>Edit</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!--end Modal-->
+<!-- Modal -->
+<div class="modal fade" id="AddRevisionNote" tabindex="-1" role="dialog" aria-labelledby="AddRevisionNote" aria-hidden="true">
+  <div class="modal-dialog modal-xl" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="AddRevisionNote">Add Note</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body modal-body-add-note">
+        {{ form.media }}
+        <form action="" method="post" >
+                {% csrf_token %}        
+                <div class="form-group">
+                {{ form.content.label_tag }}
+                {{ form.content }}
+                {{ form.content.errors }}
+                </div>
+                <div class="form-group">
+                {{ form.task.label_tag }}
+                {{ form.task }}
+                {{ form.task.errors }}
+                </div>
+                <div class="form-group">
+                <label>Tags</label>
+                <input type="text" data-role="tagsinput" class="form-control" name="tags">
+                {{ form.tags.errors }}
+                </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-primary"  name ="note_form" onclick=AddRevisionNote()>Add</button>        
+      </div>
+      </form>
+    </div>
+  </div>
+</div>
+<!--end Modal-->
+<!-- Modal - ACtivity -->
+<div class="modal fade" id="Activity_Modal" tabindex="-1" role="dialog" aria-labelledby="Activity_Modal" aria-hidden="true">
+  <div class="modal-dialog modal-xl" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="Activity_Modal">Create Quick Activity</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+  <div id="activity_error"></div>    
+ <form action="" method="post" >
+        {% csrf_token %}        
+        <div class="form-group">
+        {{ activity_form.Title.label_tag }}
+        {{ activity_form.Title }}
+        {{ activity_form.Title.errors }}
+        </div>
+        <div class="form-group">
+        {{ activity_form.Description.label_tag }}
+        {{ activity_form.Description| safe}}
+        {{ activity_form.Description.errors }}
+        </div>
+     
+    
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>   
+         <input type="button" class="btn btn-success" name ="activity_form" value="Save" onclick=CreateActivity()>    
+      </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!--end modal-->
+ <!--right bottom add icon-->
+     <a  data-toggle="modal" data-target="#Activity_Modal">
+    <span class="push-bottom" 
+    style="
+          position:fixed ;
+          bottom:25px;
+          right:25px;
+          margin:0;
+          padding:5px 3px;
+          float: left;
+          height: 50px;
+          width: 50px;
+          text-align: center;
+          font-size: 30px;
+          line-height: 24px;
+          background: #ffc107;
+          border-radius: 100%;">
+      <i class="material-icons">
+       <span data-feather="plus"></span>
+      </i>
+      </span>
+      </a>
+      <!-- end right bottom add icon-->
+{% endblock %}
+
+{% block js %}
+const CreateActivity=()=>{
+                let url = "/ActivityRouter/";
+                let activity={};
+                activity['status']='Open';
+                activity['Type']='General';
+                activity['Title'] = $("#id_Title").val();
+                activity['Description'] = $('#id_Description').val();
+                fetch(url, {
+                  headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                  },
+                  method: 'post',
+                  body: JSON.stringify(activity)
+                })
+                  .then(response=>{
+                      return response.json();
+                  })
+                  .then(res=>{
+                      if ('pk' in res){
+                          $("#activity_error").html('<div class="text-success">Activity Created.</div>');
+
+                      }else{
+                        // There is an error
+                        $("#activity_error").html(`<div class="text-danger">${res["Title"]}</div>`);
+                      }
+                            
+                  });
+}
+const loadRevisionItem=()=>{
+  let url = '/api/revision/';
+   fetch(url)
+    .then(response=>{
+        
+        return response.json();
+    })
+    .then(res=>{
+        $('#tags').empty();
+        let tags = res['tags'];
+        if (tags.length)
+        {
+          $('#tags').empty();
+          $.each(tags, function( index, value ) {
+                $('#tags').append(`<div><h5><span class="badge badge-info mr-2" >${value}</span><h5></div>`);
+                });
+        }
+        $(".modal-body-revision").html(res["content"]);
+        $("#model_id").html(res["pk"]);
+        upd = res["updated"]
+        $("#last_upd").html(upd.split("T")[0]);
+    });
+  
+ 
+}
+ const NextRevisionItem=()=>{
+    let id = $("#model_id").html();
+    let url = `/api/revision/${id}/`;
+      
+    fetch(url)
+    .then(response=>{
+      return response.json();
+    })
+    .then(res=>{
+      
+    });
+    loadRevisionItem(); // load new questions
+  }
+
+  const EditRevisionItem=()=>{
+    let id = $("#model_id").html();
+    let url = `/comments/update/${id}/`;
+    window.open(url, "_blank"); 
+  }
+
+   var revision_config = {
+    type: 'line',
+    data: {
+      datasets: [{
+        fill: false,
+        label: 'Revison Count',
+        backgroundColor:'#32a852',
+        borderColor: '#32a852',
+        data: {{ revision_data|safe }},
+      },],
+      labels: {{ revision_label|safe }}
+    },
+    options: {
+      responsive: true
+    }
+  };
+   var activity_config = {
+    type: 'line',
+    data: {
+      datasets: [{
+        fill: false,
+        label: 'Activity Done',
+        backgroundColor:'#32a852',
+        borderColor: '#a8326b',
+        data: {{ activity_data|safe }},
+      },],
+      labels: {{ activity_label |safe }}
+    },
+    options: {
+      responsive: true
+    }
+  };
+window.onload = function() {
+      var revison_ctx = document.getElementById('RevisionChart').getContext('2d');
+      window.myPie = new Chart(revison_ctx, revision_config);
+      var activity_ctx = document.getElementById('Activity').getContext('2d');
+      window.myPie = new Chart(activity_ctx, activity_config);
+    };
+
+$( ".chart_card" )
+  .mouseover(function() {
+   $(this).addClass("shadow-custom");
+  })
+  .mouseout(function() {
+     $(this).removeClass("shadow-custom");
+  });
+ 
+{% endblock %}
+
+{% block jslink %}
+<script src="{% static "js/dashboardchart.js" %}"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
+{% endblock %}
+
+{% block CSS %}
+.info-box {
+    border-bottom-left-radius: 5px;
+    border-top-right-radius: 5px;
+    min-height: 100px;
+    width: 100%;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, .1);
+    -webkit-box-shadow: 0 5px 20px rgba(0, 0, 0, .1);
+    margin-bottom: 20px;
+    padding: 15px;
+}
+.bg-b-orange {
+    background: linear-gradient(45deg, #da2e3e, #ff9304);
+}
+.bg-b-green {
+    background: linear-gradient(45deg,#6640ff,#ff7a0c);
+}
+.info-box-text, .progress-description {
+    display: block;
+    font-size: 16px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-weight: 400;
+}
+.state-overview {
+    color: #fff;
+}
+.info-box .progress {
+    background: rgba(0, 0, 0, .2);
+    margin: 5px -10px 5px 0;
+    height: 2px;
+}
+.info-box .progress .progress-bar {
+    background: #fff;
+}
+.info-box-icon.push-bottom {
+    margin-top: 20px;
+}
+.info-box-icon {
+    float: left;
+    height: 70px;
+    width: 70px;
+    text-align: center;
+    font-size: 30px;
+    line-height: 54px;
+    background: rgba(0, 0, 0, .2);
+    border-radius: 100%;
+}
+.material-icons {
+    font-family: 'Material Icons';
+    font-weight: normal;
+    font-style: normal;
+    font-size: 24px;
+    display: inline-block;
+    line-height: 1;
+    text-transform: none;
+    letter-spacing: normal;
+    word-wrap: normal;
+    white-space: nowrap;
+    direction: ltr;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    -moz-osx-font-smoothing: grayscale;
+    font-feature-settings: 'liga';
+}
+.info-box-content {
+    padding: 10px 10px 10px 0;
+    margin-left: 90px;
+}
+.card-head header {
+    display: inline-block;
+    padding: 11px 20px;
+    vertical-align: middle;
+    line-height: 17px;
+    font-size: 20px;
+}
+.shadow-custom{
+ 
+  border: 1px solid;
+  padding: 5px;
+  box-shadow: 5px 5px #888888;
+
+}
+{% endblock %}
+{% block title %}
+Dashboard
+{% endblock %}

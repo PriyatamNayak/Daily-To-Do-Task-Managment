@@ -1,0 +1,27 @@
+{% extends 'projects/base.html' %}
+{% block title %}
+Add Comment
+{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+       <h1 class="h2">Add Link </h1>
+      </div>
+
+ <form action="" method="post" >
+        {% csrf_token %}        
+        <div class="form-group">
+        {{ form.name.label_tag }}
+        {{ form.name }}
+        {{ form.name.errors }}
+        </div>
+         <div class="form-group">
+        {{ form.link.label_tag }}
+        {{ form.link }}
+        {{ form.link.errors }}
+        </div>
+        <input type="submit" class="btn btn-secondary" value="Save">
+        <a href="{% url 'HomePage' %}" class="btn btn-secondary">Cancel</a>
+    </form>
+
+
+{% endblock %}

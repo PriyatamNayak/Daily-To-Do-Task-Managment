@@ -1,0 +1,74 @@
+{% load static %}
+<head>
+<link href="{% static "/bootsrap/css/bootstrap.css" %}" rel="stylesheet" type="text/css">
+<style type="text/css">
+            @page {
+                size: {{ pagesize }};
+                margin: 1cm;
+                @frame footer {
+                    -pdf-frame-content: footerContent;
+                    bottom: 0cm;
+                    margin-left: 9cm;
+                    margin-right: 9cm;
+                    height: 1cm;
+                }
+            }
+        </style>
+</head>
+<body>
+
+
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    
+    <h1 class="h2">{{ projecttask }}</h1>
+  
+</div>
+<div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 float-right">
+    <p class="float-right">
+        <div class="input-group">
+            <input type="text" class="form-control" id="shareable_link" value="{{ absolute_url }}" readonly>
+            <div class="input-group-append">
+                <span id="copy_shareable_link" class="input-group-text"><span data-toggle="tooltip" title="Copy Shareable Link" style="cursor: pointer;">
+                <span data-feather="lock"></span>
+                </span>
+            </div>
+        </div>
+    </p>
+</div>
+<div>
+<p>{{ projecttask.Task_Description }}</p> 
+</div>
+{% comment %} <div class="page-header text-center">
+        <h1 id="timeline">Timeline 2.0</h1>
+    </div> {% endcomment %}
+<hr>
+<ul class="timeline">
+{% for com in comments %}
+<li {% if forloop.counter0|divisibleby:2 %}class="timeline-inverted"{% endif %}>
+          <div class="timeline-badge primary" ><a><span data-feather="plus-circle"></a></div>
+          <div class="timeline-panel">
+            <div class="timeline-heading"> 
+            </div>
+            <div class="timeline-body" style="background:white">
+              <p>{{com.content|safe}}</p>
+              <p>
+                {% for tag in com.tags.all %}
+                 {% if tag.name|length > 4 %}
+                        <a href="{% url 'tagged'  tag.name %}" class="badge badge-info" >{{ tag.name}}</a>
+                 {% endif %}
+                {% endfor %}
+              </p>
+            </div>            
+            <div class="timeline-footer">
+                <a class="mr-2" href="{% url 'task-comment-delete' com.pk %}"><span data-feather="trash"></a>
+                <a  class="mr-2" href="{% url 'comment_update' com.pk %}" target="_blank"><span data-feather="edit"></a>
+                <a class="float-right">{{com.created}}</a>
+                <a  class="mr-2" href="{% url 'comment-activity-add' com.pk %}" target="_blank"><span data-feather="activity"></a>
+            </div>
+          </div>
+        </li>
+{% endfor %}
+</ul>
+</div>
+
+</body>

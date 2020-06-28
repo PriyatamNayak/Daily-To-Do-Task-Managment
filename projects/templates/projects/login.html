@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load static %}
+<head>
+    <meta charset="UTF-8">
+    <title>Login</title>
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+   
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+    <script src='https://kit.fontawesome.com/a076d05399.js'></script>
+    <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+    {% load static %}
+    <link  href="{% static 'main.css' %}" />
+   
+   
+</head>
+<body >  
+<div id='msg'>
+<div  style="display: flex;width: 32rem; position: absolute;  top: 40%;
+                                    left:50%;
+                                    transform: translate(-50%,-50%);">
+                                                                        
+         <div class="card-body">
+         <h2>Organize your task!</h2>   
+         <button class="btn btn-warning mt-2" id="goto_login">Get Started</button>
+         </div>
+</div>
+<div class="row" id="info" style="width:100%; position:absolute;bottom:15%;    height: 35%;background-image:url({% static "desktop.png" %});background-size: auto 100%;">
+      <div class="col-6 col-md-3 col-lg-3" >
+         <i class="fas fa-lock" style="font-size: 50px; margin-bottom: 5%; margin-left:2%"></i>
+         <h4>Encrypted</h4>
+         <p>
+              All your data are encrypted.<br>Security is our priority.
+         </p>
+      </div>
+      <div class="col-6 col-md-3 col-lg-3">
+            <i class="fas fa-sticky-note" style="font-size: 50px; margin-bottom: 5%;"></i>
+            <h4>Save</h4>
+            <p>
+                keeps notes and do daily revision ..thats all you want. It has all the that you will needed!
+            </p>
+        </div>
+        <div class="col-6 col-md-3 col-lg-3">
+            <i class="fas fa-share-square" style="font-size: 50px; margin-bottom: 5%;"></i>
+            <h4>Share</h4>
+            <p>
+                Share your notes with each other without login but secured.
+            </p>
+        </div>
+        <div class="col-6 col-md-3 col-lg-3">
+            <i class="fab fa-searchengin" style="font-size: 50px; margin-bottom: 5%;"></i>
+            <h4>Search</h4>
+            <p>
+                Search your note quickly using global serach.
+            </p>
+        </div>
+</div> 
+</div>
+<!--Login Start-->
+<div id="display_login" class="card" style="width: 22rem; position: absolute;
+top: 50%;
+left:50%;
+transform: translate(-50%,-50%);">
+   {% comment %} <i class="fas fa-lock" style="font-size: 50px; margin-bottom: 5%; margin-left:40%;color:#ffc107"></i> {% endcomment %}
+	<div class="card-body">
+		<form action="/" method="post"> {% csrf_token %}
+			<div class="form-group">
+				<label>User Name</label>
+				<input type="text" class="form-control" placeholder="User Name" name="username">
+			</div>
+			<div class="form-group">
+				<label>Password</label>
+				<input type="password" class="form-control" placeholder="Password" name="password">
+			</div>
+			<button type="submit" class="btn btn-warning">Login</button>
+		</form>
+		<div class="text-danger">
+		{% for message in messages %}
+		{{message}}
+		{% endfor %}
+		</div>
+	</div>
+</div>
+<!--end login-->
+  
+         
+        
+   
+
+<script>
+{% if messages|length > 0 %}
+   $('#msg').hide();
+   $("#display_login").show();
+{% else %}
+   $('#msg').show();
+   $("#display_login").hide();    
+{% endif %}
+
+$("#goto_login").click(function() {
+   $('#msg').hide();
+   $("#display_login").show();
+});
+</script>
+
+</body>
+</html>

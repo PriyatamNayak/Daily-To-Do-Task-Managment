@@ -1,0 +1,189 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
+    <meta name="generator" content="Jekyll v4.0.1">
+    <title>
+    {% block title %}
+    {% endblock %}
+    </title>
+
+    
+
+    <!-- Bootstrap core CSS -->
+<link href="{% static "/bootsrap/css/bootstrap.css" %}" rel="stylesheet" type="text/css">
+<style type="text/css" media="print">
+@page {
+    
+    margin: 0;  /* this affects the margin in the printer settings */
+}
+</style>
+    <style>
+        a {
+        color: #d4a005;
+        background-color: transparent;
+        text-decoration: none;
+        }
+
+    label.required::after {
+    content: ' *';
+    color: red;
+    }
+   
+    .errorlist{
+      color:red;
+    }
+      .bd-placeholder-img {
+        font-size: 1.125rem;
+        text-anchor: middle;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+      }
+
+     
+    {% block CSS %}
+
+    {% endblock %}
+    </style>
+    <!-- Custom styles for this template -->
+    <link href="{% static "css/dashboard.css" %}" rel="stylesheet" type="text/css">
+    <link href="{% static "css/timeline.css" %}" rel="stylesheet" type="text/css">
+    <link href="{% static "css/tagsinput.css" %}" rel="stylesheet" type="text/css">
+  </head>
+  <body style="background: #fdfbfb;">
+    <nav class="navbar navbar-dark sticky-top bg-warning flex-md-nowrap p-0 shadow">
+  <a class="navbar-brand col-md-3 col-lg-2 mr-0 px-3" href="#">Work Managment</a>
+  <button class="navbar-toggler position-absolute d-md-none collapsed" type="button" data-toggle="collapse" data-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  
+ 
+  <input class="form-control form-control-light w-100 " type="text" placeholder="Search" aria-label="Search" id="Search">
+ 
+  <ul class="navbar-nav px-3">
+    <li class="nav-item text-nowrap">
+      <a class="nav-link text-white" href="{% url 'logout' %}">Sign out</a>
+    </li>
+  </ul>
+</nav>
+
+<div class="container-fluid">
+  <div class="row">
+    <nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
+      <div class="sidebar-sticky pt-3">
+        <ul class="nav flex-column">
+          <li class="nav-item">
+            <a class="nav-link active" href="{% url 'HomePage' %}">
+              <span data-feather="home"></span>
+              Dashboard <span class="sr-only">(current)</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href='{% url "task-view" %}'>
+              <span data-feather="file"></span>
+             My Notes
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url "activity-view" %}">
+              <span data-feather="activity"></span>
+              Activities
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url "task-comments-view" %}">
+              <span data-feather="layers"></span>
+              Revison
+            </a>
+          </li>
+           <li class="nav-item">
+            <a class="nav-link"   data-toggle="modal" data-target="#SettingModal">
+              <span data-feather="settings"></span>
+              Settings
+            </a>
+           
+          </li>
+          
+        </ul>
+
+        
+        
+      </div>
+    </nav>
+
+    <main role="main" id ="printable" class="col-md-9 ml-sm-auto col-lg-10 px-md-4">
+      
+      {% block content %}
+      {% endblock %}
+        
+    </main>
+    
+   
+   
+  </div>
+  
+</div>
+<!-- Modal -->
+<div class="modal fade" id="SettingModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">Settings</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+      <a class="nav-link" href="{% url 'lov-view' %}">
+              <span data-feather="external-link"></span>
+              List Of values
+      </a>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>       
+      </div>
+    </div>
+  </div>
+</div>
+
+<!--end modal-->
+<script src="{% static "js/jquery.min.js" %}"</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+<script src="{% static "bootsrap/js/bootstrap.bundle.js" %}"></script>
+<script src="{% static "js/feather.min.js" %}"></script>
+<script src="{% static "js/Chart.min.js" %}"></script>
+<script src="{% static "js/dashboard.js" %}"></script>
+<script src="{% static "js/tagsinput.js" %}"></script>
+<script>
+{% block js %}
+{% endblock %}
+$(document).on('keypress',function(e) {
+if(e.which == 13) 
+{
+  if (e.target.id=="Search")
+  {
+    let v = $("#Search").val();
+    if(v!="")
+    {
+      let key = v.trim().toLowerCase().replace(/ /g,"");
+      let l = `/comments/${key}/`;
+      let link = document.createElement('a');
+      link.href = l;
+      document.body.appendChild(link);
+      link.click(); 
+    }
+  }
+}
+});
+</script>
+
+{% block jslink %}
+{% endblock %}
+</body>
+</html>

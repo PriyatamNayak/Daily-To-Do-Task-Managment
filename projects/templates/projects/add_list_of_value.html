@@ -1,0 +1,43 @@
+{% extends 'projects/base.html' %}
+{% block title %}
+List of values
+{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+       <h1 class="h2">Add List of value</h1>
+      </div>
+<div class="table-responsive">
+
+ <form action="" method="post" >
+        {% csrf_token %}
+        <div class="form-group">
+        {{ form.Name.label_tag }}
+        {{ form.Name }}
+        {{ form.Name.errors }}
+        </div>
+        <div class="form-group">
+        {{ form.Value.label_tag }}
+        {{ form.Value }}
+        {{ form.Value.errors }}
+        </div>
+        <div class="form-group">
+        {{ form.IsCategory.label_tag }}
+        {{ form.IsCategory }} 
+        {{ form.IsCategory.errors }}       
+        </div>
+        <div class="form-group">
+        {{ form.Type.label_tag }}
+        {{ form.Type }}
+        {{ form.Type.errors }}
+        </div>
+        <div class="form-group">
+        {{ form.Description.label_tag }}
+        {{ form.Description }}
+        {{ form.Description.errors }}
+        </div>
+        <input type="submit" class="btn btn-secondary" value="Save">
+        <a href="{% url 'lov-view' %}" class="btn btn-secondary">Cancel</a>
+    </form>
+</div>
+
+{% endblock %}

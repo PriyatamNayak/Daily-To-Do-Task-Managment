@@ -1,0 +1,27 @@
+{% extends 'projects/base.html' %}
+{% block title %}
+List of values
+{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h1 class="h2">{{ projecttask }}</h1>
+    {% comment %} <div class="btn-toolbar mb-2 mb-md-0">
+        <div class="btn-group mr-2">          
+            <button type="button" class="btn btn-sm btn-outline-secondary">Add Comment</button>
+            <a class="btn btn-sm btn-outline-secondary" href="{% url 'lov-add' %}"><span data-feather="plus-circle"></a>    
+        </div>
+    </div> {% endcomment %}
+</div>
+<form method="post">
+   {% csrf_token %}
+        <div class="form-group">
+        <label for="id_Task_Description">Task description:</label>
+        <textarea name="Task_Description" cols="20" rows="5" class="form-control" required="" id="id_Task_Description"></textarea>
+        <input type="hidden" name="next" value="{{ request.GET.next }}">
+         {{ form.Task_Description.errors }}
+        </div>
+    <input type="submit" class="btn btn-sm btn-warning text-white btn-outline-secondary" value="Update">
+</form>
+</div>
+
+{% endblock %}

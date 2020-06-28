@@ -1,0 +1,33 @@
+{% extends 'projects/base.html' %}
+{% block title %}
+Add Comment
+{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+       <h1 class="h2">Add comment </h1>
+      </div>
+ {{ form.media }}
+ <form action="" method="post" >
+        {% csrf_token %}        
+        <div class="form-group">
+        {{ form.content.label_tag }}
+        {{ form.content }}
+        {{ form.content.errors }}
+        </div>
+         <div class="form-group">
+        {{ form.task.label_tag }}
+        {{ form.task }}
+        {{ form.task.errors }}
+        </div>
+        <div class="form-group">
+        <label>Tags</label>
+        <input type="text" data-role="tagsinput" class="form-control" name="tags">
+        {{ form.tags.errors }}
+        </div>
+        <input type="hidden" name="next" value="{{ request.GET.next }}">
+        <input type="submit" class="btn btn-secondary" value="Save">
+        <a href="{% url 'task-view' %}" class="btn btn-secondary">Cancel</a>
+    </form>
+
+
+{% endblock %}
