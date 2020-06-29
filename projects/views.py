@@ -374,6 +374,9 @@ class TaskCommentUpdate(LoginRequiredMixin,UpdateView):
     # form_class=ProjectTaskCommentCreateForm
     template_name_suffix = '_update_form'
     fields = ['content', 'tags', ]
+    def get_success_url(self, **kwargs):
+        next = self.request.POST.get('next', '/')
+        return next
 
 class CommentsDetail(LoginRequiredMixin,ListView):
     '''

@@ -147,133 +147,10 @@
 <!--Link card End-->    
         
 
-<!-- Modal -->
-<div class="modal fade" id="Revision" tabindex="-1" role="dialog" aria-labelledby="Revision" aria-hidden="true">
-  <div class="modal-dialog modal-xl" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="Revision">Revision</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-       <div class="modal-body " id="last_upd">        
-      </div>
-      <div class="modal-body modal-body-revision">
-        Loading...
-        
-      </div>
-      <div class="modal-body btn-group" id="tags">        
-      </div>
-      <div id="model_id" class="invisible"></div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary" onclick=NextRevisionItem()>Next</button>
-        <button type="button" class="btn btn-warning" onclick=EditRevisionItem()>Edit</button>
-      </div>
-    </div>
-  </div>
-</div>
-<!--end Modal-->
-<!-- Modal -->
-<div class="modal fade" id="AddRevisionNote" tabindex="-1" role="dialog" aria-labelledby="AddRevisionNote" aria-hidden="true">
-  <div class="modal-dialog modal-xl" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="AddRevisionNote">Add Note</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body modal-body-add-note">
-        {{ form.media }}
-        <form action="" method="post" >
-                {% csrf_token %}        
-                <div class="form-group">
-                {{ form.content.label_tag }}
-                {{ form.content }}
-                {{ form.content.errors }}
-                </div>
-                <div class="form-group">
-                {{ form.task.label_tag }}
-                {{ form.task }}
-                {{ form.task.errors }}
-                </div>
-                <div class="form-group">
-                <label>Tags</label>
-                <input type="text" data-role="tagsinput" class="form-control" name="tags">
-                {{ form.tags.errors }}
-                </div>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="submit" class="btn btn-primary"  name ="note_form" onclick=AddRevisionNote()>Add</button>        
-      </div>
-      </form>
-    </div>
-  </div>
-</div>
-<!--end Modal-->
-<!-- Modal - ACtivity -->
-<div class="modal fade" id="Activity_Modal" tabindex="-1" role="dialog" aria-labelledby="Activity_Modal" aria-hidden="true">
-  <div class="modal-dialog modal-xl" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="Activity_Modal">Create Quick Activity</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-  <div id="activity_error"></div>    
- <form action="" method="post" >
-        {% csrf_token %}        
-        <div class="form-group">
-        {{ activity_form.Title.label_tag }}
-        {{ activity_form.Title }}
-        {{ activity_form.Title.errors }}
-        </div>
-        <div class="form-group">
-        {{ activity_form.Description.label_tag }}
-        {{ activity_form.Description| safe}}
-        {{ activity_form.Description.errors }}
-        </div>
-     
-    
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>   
-         <input type="button" class="btn btn-success" name ="activity_form" value="Save" onclick=CreateActivity()>    
-      </div>
-      </form>
-    </div>
-  </div>
-</div>
-
-<!--end modal-->
- <!--right bottom add icon-->
-     <a  data-toggle="modal" data-target="#Activity_Modal">
-    <span class="push-bottom" 
-    style="
-          position:fixed ;
-          bottom:25px;
-          right:25px;
-          margin:0;
-          padding:5px 3px;
-          float: left;
-          height: 50px;
-          width: 50px;
-          text-align: center;
-          font-size: 30px;
-          line-height: 24px;
-          background: #ffc107;
-          border-radius: 100%;">
-      <i class="material-icons">
-       <span data-feather="plus"></span>
-      </i>
-      </span>
-      </a>
-      <!-- end right bottom add icon-->
+{% include "projects/modal/revision_modal.html" %}
+{% include "projects/modal/add_note_modal.html" %}
+{% include "projects/modal/create_activity_modal.html" %}
+{% include "projects/icons/add_new_icon.html" %}
 {% endblock %}
 
 {% block js %}
@@ -327,6 +204,7 @@ const loadRevisionItem=()=>{
         $("#model_id").html(res["pk"]);
         upd = res["updated"]
         $("#last_upd").html(upd.split("T")[0]);
+       
     });
   
  
@@ -492,4 +370,8 @@ $( ".chart_card" )
 {% endblock %}
 {% block title %}
 Dashboard
+{% endblock %}
+
+{% block CSSLink %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 {% endblock %}

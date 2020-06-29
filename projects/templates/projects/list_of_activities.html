@@ -1,40 +1,50 @@
+
 {% extends 'projects/base.html' %}
+{% load static %}
+{% load humanize %}
+{% block jslink %}
+<script src="{% static "js/jquery.dataTables.min.js" %}"></script>
+{% endblock %}.
+{% block CSSLink %}
+<link href="{% static "css/jquery.dataTables.min.css"  %}" rel="stylesheet" type="text/css">
+{% endblock %}
+
 {% block title %}
-List of values
+Activities
 {% endblock %}
 {% block content %}
 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-       <h1 class="h2">Activities</h1>
+       <h1 class="h2" style="color: gray">Activities</h1>
        
         <div class="btn-toolbar mb-2 mb-md-0">
           <div class="btn-group mr-2">          
-            <div  class="btn btn-sm btn-secondary">Add</div>
+            <div  class="btn btn-sm btn-warning text-white btn-outline-secondary">Add</div>
             <a class="btn btn-sm btn-outline-secondary" href="{% url 'activity-add' %}"><span data-feather="plus-circle"></a>    
           </div>
           <div class="btn-group mr-2">          
-            <div type="button" class="btn btn-sm btn-secondary">Scheduled Activities</div>
+            <div type="button" class="btn btn-sm btn-warning text-white btn-outline-secondary">Scheduled Activities</div>
             <a class="btn btn-sm btn-outline-secondary" href="{% url 'activity-scheduled' 'scheduled' %}"><span data-feather="activity"></a>    
           </div>
            <div class="btn-group mr-2">          
-            <div type="button" class="btn btn-sm btn-secondary">All Activities</div>
+            <div type="button" class="btn btn-sm btn-warning text-white btn-outline-secondary">All Activities</div>
             <a class="btn btn-sm btn-outline-secondary" href="{% url 'activity-scheduled' 'all' %}"><span data-feather="activity"></a>    
           </div>
           <div class="btn-group mr-2">          
-            <div type="button" class="btn btn-sm btn-secondary">My Activities</div>
+            <div type="button" class="btn btn-sm btn-warning text-white btn-outline-secondary">My Activities</div>
             <a class="btn btn-sm btn-outline-secondary" href="{% url 'activity-view'  %}"><span data-feather="activity"></a>    
           </div>
         </div>
       </div>
 <div class="table-responsive">
-        <table class="table table-striped table-sm">
-          <thead>
-            <tr>
-              <th>#</th>
-              <th>Title</th>
-              <th>Status</th>
-              <th>Type</th>
-              <th>Scheduled On</th>
-              <th>Action</th>
+        <table class="table table-striped table-bordered" id="all_activities">
+          <thead class="thead-dark">
+            <tr class="text-center">
+              <th scope="col">#</th>
+              <th scope="col">Title</th>
+              <th scope="col">Status</th>
+              <th scope="col">Type</th>
+              <th scope="col">Scheduled On</th>
+              <th scope="col">Action</th>
             </tr>
           </thead>
           <tbody>
@@ -45,9 +55,9 @@ List of values
               <td>{{item.status}}</td>
               <td>{{item.Type}}</td>
               {% if item.isScheduled %}
-                <td style="color:red">{{item.scheduled}}</td>
+                <td style="color:red">{{item.scheduled|naturaltime }}</td>
               {% else %}
-                <td>{{item.scheduled}}</td>
+                <td>{{item.scheduled|naturaltime }}</td>
               {% endif %}
               <td>
                 <a class="nav-link" href="{% url 'activity-delete' item.pk %}"">
@@ -101,3 +111,17 @@ List of values
 {% endif %}
 
 {% endblock %}
+
+{% block js %}
+$(document).ready(function () {
+   //Data Table Configuration
+        $('#all_activities').DataTable({
+          order: [],
+          responsive: true,
+          lengthChange: false,
+           "paging":   false,
+           "ordering": true,
+        });
+    });
+{% endblock %}
+

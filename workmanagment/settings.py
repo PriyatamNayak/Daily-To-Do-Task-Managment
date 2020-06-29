@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'api',
     'rest_framework.authtoken',
     'taggit_serializer',
+    'django.contrib.humanize',
 
     
 ]

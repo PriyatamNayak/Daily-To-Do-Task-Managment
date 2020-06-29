@@ -1,0 +1,37 @@
+<!-- Modal - ACtivity -->
+<div class="modal fade" id="Activity_Modal" tabindex="-1" role="dialog" aria-labelledby="Activity_Modal" aria-hidden="true">
+  <div class="modal-dialog modal-xl" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="Activity_Modal">Create Quick Activity</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+  <div id="activity_error"></div>    
+ <form action="" method="post" >
+        {% csrf_token %}        
+        <div class="form-group">
+        {{ activity_form.Title.label_tag }}
+        {{ activity_form.Title }}
+        {{ activity_form.Title.errors }}
+        </div>
+        <div class="form-group">
+        {{ activity_form.Description.label_tag }}
+        {{ activity_form.Description| safe}}
+        {{ activity_form.Description.errors }}
+        </div>
+     
+    
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>   
+         <input type="button" class="btn btn-success" name ="activity_form" value="Save" onclick=CreateActivity()>    
+      </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!--end modal-->

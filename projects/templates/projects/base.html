@@ -16,13 +16,16 @@
 
     <!-- Bootstrap core CSS -->
 <link href="{% static "/bootsrap/css/bootstrap.css" %}" rel="stylesheet" type="text/css">
-<style type="text/css" media="print">
-@page {
-    
-    margin: 0;  /* this affects the margin in the printer settings */
-}
-</style>
+{% block CSSLink %}
+
+{% endblock %}
     <style>
+          /* Issue to fix tooltip in modal */
+          .tooltip {
+            z-index: 1151 !important;
+
+          }
+          /*color of link */
         a {
         color: #d4a005;
         background-color: transparent;
@@ -55,6 +58,7 @@
     <link href="{% static "css/dashboard.css" %}" rel="stylesheet" type="text/css">
     <link href="{% static "css/timeline.css" %}" rel="stylesheet" type="text/css">
     <link href="{% static "css/tagsinput.css" %}" rel="stylesheet" type="text/css">
+    
   </head>
   <body style="background: #fdfbfb;">
     <nav class="navbar navbar-dark sticky-top bg-warning flex-md-nowrap p-0 shadow">
@@ -153,13 +157,17 @@
 </div>
 
 <!--end modal-->
-<script src="{% static "js/jquery.min.js" %}"</script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+<script src="{% static "js/jquery.min.js" %}"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+<!--reuire for tooltip--><script src="{% static "bootsrap/js/bootstrap.min.js" %}"></script>
 <script src="{% static "bootsrap/js/bootstrap.bundle.js" %}"></script>
 <script src="{% static "js/feather.min.js" %}"></script>
 <script src="{% static "js/Chart.min.js" %}"></script>
 <script src="{% static "js/dashboard.js" %}"></script>
 <script src="{% static "js/tagsinput.js" %}"></script>
+{% block jslink %}
+{% endblock %}
+
 <script>
 {% block js %}
 {% endblock %}
@@ -181,9 +189,11 @@ if(e.which == 13)
   }
 }
 });
+$(document).ready(function () {
+  $('[data-toggle="tooltip"]').tooltip(); 
+    });
 </script>
 
-{% block jslink %}
-{% endblock %}
+
 </body>
 </html>

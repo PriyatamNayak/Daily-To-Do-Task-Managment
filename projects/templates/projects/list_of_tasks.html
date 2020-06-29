@@ -1,10 +1,17 @@
 {% extends 'projects/base.html' %}
+{% load static %}
+{% block jslink %}
+<script src="{% static "js/jquery.dataTables.min.js" %}"></script>
+{% endblock %}.
+{% block CSSLink %}
+<link href="{% static "css/jquery.dataTables.min.css"  %}" rel="stylesheet" type="text/css">
+{% endblock %}
 {% block title %}
-List of values
+Tasks
 {% endblock %}
 {% block content %}
 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-       <h1 class="h2">Notes</h1>
+       <h1 class="h2" style="color: gray">Notes</h1>
        
         <div class="btn-toolbar mb-2 mb-md-0">
           <div class="btn-group mr-2">          
@@ -14,12 +21,13 @@ List of values
         </div>
       </div>
 <div class="table-responsive bg-white">
-        <table class="table table-striped table-sm">
-          <thead>
-            <tr>
-              <th>#</th>
-              <th>Description</th>
-              <th>Action</th>
+         <table class="table table-striped table-bordered" id="all_activities">
+          <thead class="thead-dark">
+            <tr class="text-center">
+            
+              <th scope="col">#</th>
+              <th scope="col">Description</th>
+              <th scope="col">Action</th>
             </tr>
           </thead>
           <tbody>
@@ -77,4 +85,17 @@ List of values
     </nav>  
     </div>
 {% endif %}
+{% endblock %}
+
+{% block js %}
+$(document).ready(function () {
+   //Data Table Configuration
+        $('#all_activities').DataTable({
+          order: [],
+          responsive: true,
+          lengthChange: false,
+           "paging":   false,
+           "ordering": true,
+        });
+    });
 {% endblock %}

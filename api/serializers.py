@@ -42,7 +42,7 @@ class TaskCommentSerializer(TaggitSerializer,serializers.ModelSerializer):
   tags = TagListSerializerField()
   class Meta:
     model = TaskComment 
-    fields = ('pk', 'content', 'updated','tags' ,'task')
+    fields = ('pk', 'content', 'updated','tags' ,'task','created')
 
 # Task Serializer
 class TaskSerializer(serializers.ModelSerializer):

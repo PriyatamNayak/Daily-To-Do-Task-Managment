@@ -1,0 +1,39 @@
+<!-- Add note Modal -->
+<div class="modal fade" id="AddRevisionNote" tabindex="-1" role="dialog" aria-labelledby="AddRevisionNote" aria-hidden="true">
+  <div class="modal-dialog modal-xl" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="AddRevisionNote">Add Note</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body modal-body-add-note">
+        {{ form.media }}
+        <form action="" method="post" >
+                {% csrf_token %}        
+                <div class="form-group">
+                {{ form.content.label_tag }}
+                {{ form.content }}
+                {{ form.content.errors }}
+                </div>
+                <div class="form-group">
+                {{ form.task.label_tag }}
+                {{ form.task }}
+                {{ form.task.errors }}
+                </div>
+                <div class="form-group">
+                <label>Tags</label>
+                <input type="text" data-role="tagsinput" class="form-control" name="tags">
+                {{ form.tags.errors }}
+                </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-primary"  name ="note_form" onclick=AddRevisionNote()>Add</button>        
+      </div>
+      </form>
+    </div>
+  </div>
+</div>
+<!--end Modal-->
